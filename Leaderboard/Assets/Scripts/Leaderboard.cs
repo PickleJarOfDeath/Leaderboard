@@ -24,6 +24,7 @@ public class Leaderboard : MonoBehaviour
 
     public void SetLeaderboardEntry(int newScore)
     {
+        Debug.Log("it did the thing");
         ExecuteCloudScriptRequest request = new ExecuteCloudScriptRequest
         {
             FunctionName = "UpdateHighscore",
@@ -31,7 +32,9 @@ public class Leaderboard : MonoBehaviour
         };
 
         PlayFabClientAPI.ExecuteCloudScript(request,
-            result => DisplayLeaderboard(),
+            result => { DisplayLeaderboard();
+                Debug.Log(result.ToJson());
+            },
             error => Debug.Log(error.ErrorMessage)
         );
     }
@@ -60,7 +63,7 @@ public class Leaderboard : MonoBehaviour
                 continue;
 
             leaderboardEntries[x].transform.Find("PlayerName").GetComponent<TextMeshProUGUI>().text = (leaderboard[x].Position + 1) + ". " + leaderboard[x].DisplayName;
-            leaderboardEntries[x].transform.Find("ScoreText").GetComponent<TextMeshProUGUI>().text = (-(float)leaderboard[x].StatValue * 0.001f).ToString("F2");
+            leaderboardEntries[x].transform.Find("Score").GetComponent<TextMeshProUGUI>().text = (-(float)leaderboard[x].StatValue * 0.001f).ToString("F2");
         }
     }
 }
